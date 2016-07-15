@@ -108,7 +108,7 @@ namespace AT_Utils
 				Animation[] animations = part.FindModelAnimators(aname);
 				if(animations == null || animations.Length == 0)
 				{
-					this.Log("setup_animation: there's no '{0}' animation in {1}", 
+					this.Log("setup_animation: there's no '{}' animation in {}", 
 							  aname, part.name);
 					continue;
 				}
