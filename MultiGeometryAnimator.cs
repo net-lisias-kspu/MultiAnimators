@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 
-
 namespace AT_Utils
 {
 	/// <summary>
@@ -21,6 +20,8 @@ namespace AT_Utils
 		static readonly string[] cube_names = {A, B};
 		static readonly Dictionary<string,int> cube_positions = new Dictionary<string, int>{{ A, 1 }, { B, 0 }};
 		public string[] GetDragCubeNames() { return cube_names; }
+		public ConfigNode ModuleConfig;
+		public VectorCurve CoMCurve;
 
 		public void AssumeDragCubePosition(string anim)
 		{
@@ -31,12 +32,38 @@ namespace AT_Utils
 		}
 		public bool UsesProceduralDragCubes() { return false; }
 
-		protected override void on_progress(float p)
+		protected override void on_norm_time(float t)
 		{
-			part.DragCubes.SetCubeWeight(A, p);
-			part.DragCubes.SetCubeWeight(B, 1f - p);
+			part.DragCubes.SetCubeWeight(A, t);
+			part.DragCubes.SetCubeWeight(B, 1-t);
 			if(part.DragCubes.Procedural)
 				part.DragCubes.ForceUpdate(true, true, false);
+			if(CoMCurve != null) part.CoMOffset = CoMCurve.Evaluate(t);
+		}
+
+		public override void OnStart(StartState state)
+		{
+			init_CoM_curve();
+			base.OnStart(state);
+		}
+
+		public override void OnLoad(ConfigNode node)
+		{
+			base.OnLoad(node);
+			if(ModuleConfig == null) ModuleConfig = node;
+		}
+
+		bool init_CoM_curve()
+		{
+			CoMCurve = null;
+			if(ModuleConfig == null) return false;
+			var n = ModuleConfig.GetNode("CoMCurve");
+			if(n != null) 
+			{
+				CoMCurve = ConfigNodeObject.FromConfig<VectorCurve>(n);
+				return true;
+			}
+			return false;
 		}
 	}
 }

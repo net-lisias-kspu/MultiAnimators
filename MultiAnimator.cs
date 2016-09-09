@@ -103,13 +103,14 @@ namespace AT_Utils
 		protected void setup_animation()
 		{
 			//animations
+			animation_states.Clear();
 			foreach(var aname in AnimationNames.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
 			{
 				Animation[] animations = part.FindModelAnimators(aname);
 				if(animations == null || animations.Length == 0)
 				{
 					this.Log("setup_animation: there's no '{}' animation in {}", 
-							  aname, part.name);
+					         aname, part.Title());
 					continue;
 				}
 				foreach(Animation anim in animations)
@@ -145,7 +146,7 @@ namespace AT_Utils
 			Duration = 0f;
 			if(State == AnimatorState.Opened) progress = 1f;
 			setup_animation();
-			seek(progress);
+			set_progress(progress);
 			if(EnergyConsumption > 0) 
 				socket = part.CreateSocket();
 			//GUI
@@ -155,17 +156,21 @@ namespace AT_Utils
 			update_events();
         }
 
-		protected void seek(float _progress = 0f, bool update_state = true)
+		protected void set_progress(float p, bool update_state = true)
 		{
-			var p = Reverse? 1-_progress : _progress;
-			var norm_time = Mathf.Clamp01(p*StopTime/100f);
-			animation_states.ForEach(s => s.normalizedTime = norm_time);
-			if(update_state) on_progress(p);
-			on_stop.Fire(p);
 			progress = p;
+			p = Reverse? 1-p : p;
+			seek(Mathf.Clamp01(p*StopTime/100f), update_state);
+			if(update_state) on_stop.Fire(progress);
 		}
 
-		protected virtual void on_progress(float p) {}
+		protected void seek(float t, bool update_state = true)
+		{
+			animation_states.ForEach(s => s.normalizedTime = t);
+			if(update_state) on_norm_time(t);
+		}
+
+		protected virtual void on_norm_time(float t) {}
 
 		public virtual void Update()
         {
@@ -187,14 +192,14 @@ namespace AT_Utils
 				_progress = Math.Min(_progress, time);
 				state.speed = speed;
 			}
+			on_norm_time(_progress);
 			last_progress = progress;
 			progress = Mathf.Clamp01(_progress/StopTime*100f);
 			if(Reverse) progress = 1-progress;
-			on_progress(progress);
 			on_stop.Fire(progress);
 			//check progress
 			if(State == AnimatorState.Opening && progress >= 1)
-			{ if(Loop) seek(0); else State = AnimatorState.Opened; }
+			{ if(Loop) set_progress(0); else State = AnimatorState.Opened; }
 			else if(State == AnimatorState.Closing && progress <= 0) 
 				State = AnimatorState.Closed;
 			//stop the animation if not playing anymore
@@ -304,14 +309,14 @@ namespace AT_Utils
 		#endregion
 
 		#region ScalarModule
-		protected EventData<float, float> on_move = new EventData<float, float>("OnMove ");
-		protected EventData<float> on_stop = new EventData<float>("OnStop ");
+		protected EventData<float, float> on_move = new EventData<float, float>("OnMove");
+		protected EventData<float> on_stop = new EventData<float>("OnStop");
 
 		public float GetScalar { get { return progress; } }
 		public bool CanMove { get { return AllowWhileShielded || !part.ShieldedFromAirstream; } }
 		public EventData<float, float> OnMoving { get { return on_move; } }
 		public EventData<float> OnStop { get { return on_stop; } }
-		public void SetScalar(float t) { seek(t); }
+		public void SetScalar(float t) { set_progress(t); }
 		public bool IsMoving() { return Playing; }
 
 		public void SetUIRead(bool state) {}
