@@ -156,11 +156,19 @@ namespace AT_Utils
 			update_events();
         }
 
+		protected float ntime 
+		{ 
+			get 
+			{ 
+				var p = Reverse? 1-progress : progress;
+				return Mathf.Clamp01(p*StopTime/100f);
+			}
+		}
+
 		protected void set_progress(float p, bool update_state = true)
 		{
 			progress = p;
-			p = Reverse? 1-p : p;
-			seek(Mathf.Clamp01(p*StopTime/100f), update_state);
+			seek(ntime, update_state);
 			if(update_state) on_stop.Fire(progress);
 		}
 
