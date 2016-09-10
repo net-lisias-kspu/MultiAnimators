@@ -65,6 +65,25 @@ namespace AT_Utils
 			}
 			return false;
 		}
+
+		public void UpdateCoMOffset()
+		{
+			if(CoMCurve == null) return;
+			part.CoMOffset = CoMCurve.Evaluate(ntime);
+		}
+	}
+
+	public class GeometryAnimatorUpdater : ModuleUpdater<MultiGeometryAnimator>
+	{ 
+		protected override void on_rescale(ModulePair<MultiGeometryAnimator> mp, Scale scale)
+		{ 
+			mp.module.EnergyConsumption = mp.base_module.EnergyConsumption * scale.absolute.quad * scale.absolute.aspect;
+			if(mp.module.CoMCurve != null)
+			{
+				mp.module.CoMCurve.Scale(scale.ScaleVectorRelative(Vector3d.one)); 
+				mp.module.UpdateCoMOffset();
+			}
+		}
 	}
 }
 
