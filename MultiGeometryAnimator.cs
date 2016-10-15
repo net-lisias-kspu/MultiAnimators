@@ -31,6 +31,7 @@ namespace AT_Utils
 			seek(pos, false);
 		}
 		public bool UsesProceduralDragCubes() { return false; }
+		public bool IsMultipleCubesActive { get { return true; } }
 
 		protected override void on_norm_time(float t)
 		{

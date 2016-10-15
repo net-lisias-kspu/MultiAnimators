@@ -320,6 +320,7 @@ namespace AT_Utils
 		protected EventData<float, float> on_move = new EventData<float, float>("OnMove");
 		protected EventData<float> on_stop = new EventData<float>("OnStop");
 
+		public string ScalarModuleID { get { return "ModuleAnimator."+AnimatorID; } }
 		public float GetScalar { get { return progress; } }
 		public bool CanMove { get { return AllowWhileShielded || !part.ShieldedFromAirstream; } }
 		public EventData<float, float> OnMoving { get { return on_move; } }
