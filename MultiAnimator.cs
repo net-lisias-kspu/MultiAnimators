@@ -22,9 +22,10 @@ namespace AT_Utils
 
 	/// <summary>
 	/// It is much less sofisticated than the stock ModuleAnimateGeneric, but has two key differences:
-	/// first, it supports multiple different animation and it uses ALL the animations of the same name 
+	/// first, it supports multiple different animations and it uses ALL the animations of the same name 
 	/// (think of a composit part that uses the same model with an animtion several times);
-	/// second, it also allows for sound and particle emitter to acompany the animation.
+	/// second, it also allows for sound and particle emitter to acompany the animation, 
+	/// and not preconfigured event-based, but realtime adjusted.
 	/// </summary>
 	public class MultiAnimator : PartModule, IResourceConsumer, IScalarModule
 	{
@@ -63,6 +64,7 @@ namespace AT_Utils
 		[KSPField] public float  MaxDistance = 30f;
 		[KSPField] public float  MaxVolume   = 1f;
 		[KSPField] public float  MinVolume   = 0.1f;
+		[KSPField] public float  MaxPitch    = 1f;
 		[KSPField] public float  MinPitch    = 0.1f;
 		public FXGroup fxSound;
 		//energy consumption
@@ -238,7 +240,7 @@ namespace AT_Utils
 		void update_sound_params()
 		{
 			if(fxSound.audio == null) return;
-			fxSound.audio.pitch = Mathf.Lerp(MinPitch, 1f, speed_multiplier);
+			fxSound.audio.pitch = Mathf.Lerp(MinPitch, MaxPitch, speed_multiplier);
 			fxSound.audio.volume = GameSettings.SHIP_VOLUME * Mathf.Lerp(MinVolume, MaxVolume, speed_multiplier);
 		}
 
