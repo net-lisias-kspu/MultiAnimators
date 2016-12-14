@@ -6,6 +6,7 @@
 //  Copyright (c) 2016 Allis Tauri
 
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AT_Utils
 {
@@ -20,8 +21,8 @@ namespace AT_Utils
 		static readonly string[] cube_names = {A, B};
 		static readonly Dictionary<string,int> cube_positions = new Dictionary<string, int>{{ A, 1 }, { B, 0 }};
 		public string[] GetDragCubeNames() { return cube_names; }
-		public ConfigNode ModuleConfig;
-		public VectorCurve CoMCurve;
+
+		[KSPField] public VectorCurve CoMCurve = new VectorCurve();
 
 		public void AssumeDragCubePosition(string anim)
 		{
@@ -39,37 +40,12 @@ namespace AT_Utils
 			part.DragCubes.SetCubeWeight(B, 1-t);
 			if(part.DragCubes.Procedural)
 				part.DragCubes.ForceUpdate(true, true, false);
-			if(CoMCurve != null) part.CoMOffset = CoMCurve.Evaluate(t);
-		}
-
-		public override void OnStart(StartState state)
-		{
-			init_CoM_curve();
-			base.OnStart(state);
-		}
-
-		public override void OnLoad(ConfigNode node)
-		{
-			base.OnLoad(node);
-			if(ModuleConfig == null) ModuleConfig = node;
-		}
-
-		bool init_CoM_curve()
-		{
-			CoMCurve = null;
-			if(ModuleConfig == null) return false;
-			var n = ModuleConfig.GetNode("CoMCurve");
-			if(n != null) 
-			{
-				CoMCurve = ConfigNodeObject.FromConfig<VectorCurve>(n);
-				return true;
-			}
-			return false;
+			if(CoMCurve.Length > 0) part.CoMOffset = CoMCurve.Evaluate(t);
 		}
 
 		public void UpdateCoMOffset()
 		{
-			if(CoMCurve == null) return;
+			if(CoMCurve.Length == 0) return;
 			part.CoMOffset = CoMCurve.Evaluate(ntime);
 		}
 	}
