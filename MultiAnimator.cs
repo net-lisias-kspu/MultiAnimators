@@ -27,7 +27,7 @@ namespace AT_Utils
 	/// second, it also allows for sound and particle emitter to acompany the animation, 
 	/// and not preconfigured event-based, but realtime adjusted.
 	/// </summary>
-	public class MultiAnimator : PartModule, IResourceConsumer, IScalarModule
+	public class MultiAnimator : SerializableFiledsPartModule, IResourceConsumer, IScalarModule
 	{
 		//animation
 		[KSPField(isPersistant = true)]  public AnimatorState State;

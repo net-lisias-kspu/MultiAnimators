@@ -22,7 +22,9 @@ namespace AT_Utils
 		static readonly Dictionary<string,int> cube_positions = new Dictionary<string, int>{{ A, 1 }, { B, 0 }};
 		public string[] GetDragCubeNames() { return cube_names; }
 
-		[KSPField] public VectorCurve CoMCurve = new VectorCurve();
+		[KSPField] 
+		[SerializeField]
+		public VectorCurve CoMCurve = new VectorCurve();
 
 		public void AssumeDragCubePosition(string anim)
 		{
