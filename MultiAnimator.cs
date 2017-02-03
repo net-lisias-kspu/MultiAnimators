@@ -33,20 +33,20 @@ namespace AT_Utils
 		[KSPField(isPersistant = true)]  public AnimatorState State;
 		[KSPField(isPersistant = false)] public string AnimatorID = "_none_";
 
-		[KSPField(isPersistant = false)] public string OpenEventGUIName;
-		[KSPField(isPersistant = false)] public string CloseEventGUIName;
-		[KSPField(isPersistant = false)] public string ActionGUIName;
-		[KSPField(isPersistant = false)] public string StopTimeGUIName;
+		[KSPField(isPersistant = false)] public string OpenEventGUIName = "";
+		[KSPField(isPersistant = false)] public string CloseEventGUIName = "";
+		[KSPField(isPersistant = false)] public string ActionGUIName = "";
+		[KSPField(isPersistant = false)] public string StopTimeGUIName = "";
 
-		[KSPField(isPersistant = false)] public string AnimationNames;
+		[KSPField(isPersistant = false)] public string AnimationNames = "";
 		[KSPField(isPersistant = false)] public float  ForwardSpeed = 1f;
 		[KSPField(isPersistant = false)] public float  ReverseSpeed = 1f;
 		[KSPField(isPersistant = false)] public bool   Loop;
 		[KSPField(isPersistant = false)] public bool   Reverse;
-		[KSPField(isPersistant = false)] public float  EnergyConsumption = 0f;
+		[KSPField(isPersistant = false)] public float  EnergyConsumption;
 		[KSPField(isPersistant = false)] public bool   AllowWhileShielded;
-		[KSPField(isPersistant = true)]  public float  progress = 0f;
-		protected float last_progress = 0f;
+		[KSPField(isPersistant = true)]  public float  progress;
+		protected float last_progress;
 
 		[KSPField(isPersistant=true, guiActiveEditor=false, guiActive = false, guiName="Stop At", guiFormat="F1")]
 		[UI_FloatEdit(scene=UI_Scene.All, minValue=0f, maxValue=100f, incrementLarge=20f, incrementSmall=10f, incrementSlide=1f, unit = "%")]
@@ -106,9 +106,9 @@ namespace AT_Utils
 		{
 			//animations
 			animation_states.Clear();
-			foreach(var aname in AnimationNames.Split(new []{' '}, StringSplitOptions.RemoveEmptyEntries))
+			foreach(var aname in Utils.ParseLine(AnimationNames, Utils.Whitespace))
 			{
-				Animation[] animations = part.FindModelAnimators(aname);
+				var animations = part.FindModelAnimators(aname);
 				if(animations == null || animations.Length == 0)
 				{
 					this.Log("setup_animation: there's no '{}' animation in {}", 
@@ -117,8 +117,8 @@ namespace AT_Utils
 				}
 				foreach(Animation anim in animations)
 				{
-					if(anim[aname] == null) continue;
-					AnimationState animationState = anim[aname];
+					var animationState = anim[aname];
+					if(animationState == null) continue;
 					animationState.speed = 0;
 					animationState.enabled = true;
 					animationState.wrapMode = WrapMode.ClampForever;
@@ -127,6 +127,10 @@ namespace AT_Utils
 				}
 			}
 			Duration = animation_states.Aggregate(0f, (d, s) => Math.Max(d, s.length));
+			if(Duration.Equals(0))
+				this.Log("setup_animation: animation length is zero!\n" +
+				         "Part: {}, AnimationNames: {}", 
+				         part.Title(), AnimationNames);
 			//emitter
 			emitter = part.FindModelComponents<KSPParticleEmitter>().FirstOrDefault();
 			if(emitter != null) 
@@ -344,7 +348,7 @@ namespace AT_Utils
 	public static class MultiAnimatorExtensions
 	{
 		public static MultiAnimator GetAnimator(this Part p, string ID)
-		{ return p.Modules.OfType<MultiAnimator>().FirstOrDefault(m => m.AnimatorID == ID); }
+		{ return p.Modules.GetModules<MultiAnimator>().FirstOrDefault(m => m.AnimatorID == ID); }
 	}
 
 	public class AnimatorUpdater : ModuleUpdater<MultiAnimator>
