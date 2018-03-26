@@ -317,7 +317,7 @@ namespace AT_Utils
 		#endregion
 
 		#region ResourceConsumer
-		static readonly List<PartResourceDefinition> consumed_resources = new List<PartResourceDefinition>(new [] {Utils.ElectricCharge});
+        static readonly List<PartResourceDefinition> consumed_resources = new List<PartResourceDefinition>{Utils.ElectricCharge.def};
 		public List<PartResourceDefinition> GetConsumedResources() 
 		{ return EnergyConsumption > 0? consumed_resources : new List<PartResourceDefinition>(); }
 		#endregion
