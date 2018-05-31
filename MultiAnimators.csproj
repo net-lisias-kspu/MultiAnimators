@@ -37,6 +37,7 @@
     <Compile Include="MultiAnimator.cs" />
     <Compile Include="MultiGeometryAnimator.cs" />
     <Compile Include="MultiLights.cs" />
+    <Compile Include="AnimatedGroundAnchor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
