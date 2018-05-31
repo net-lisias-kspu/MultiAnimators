@@ -195,7 +195,8 @@ namespace AT_Utils
             if(Reverse) speed *= -1;
             if(HighLogic.LoadedSceneIsEditor) 
                 speed *= 1 - 10 * (progress - 1) * progress;
-            else speed *= speed_multiplier;
+            else
+                speed *= speed_multiplier * TimeWarp.CurrentRate;
             //set animation speed, compute total progress
             float _progress = 1;
             for(int i = 0, count = animation_states.Count; i < count; i++)
