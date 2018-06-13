@@ -11,25 +11,25 @@ namespace AT_Utils
         [KSPField] public string AnimatorID = string.Empty;
         MultiAnimator Animator;
 
-		public override void OnStart(StartState state)
-		{
+        public override void OnStart(StartState state)
+        {
             base.OnStart(state);
             if(!string.IsNullOrEmpty(AnimatorID))
                 Animator = part.GetAnimator(AnimatorID);
-		}
+        }
 
-		protected override void on_anchor_attached()
-		{
+        protected override void on_anchor_attached()
+        {
             base.on_anchor_attached();
             if(Animator != null)
                 Animator.Open();
-		}
+        }
 
-		protected override void on_anchor_detached()
-		{
+        protected override void on_anchor_detached()
+        {
             base.on_anchor_detached();
             if(Animator != null)
                 Animator.Close();
-		}
-	}
+        }
+    }
 }
