@@ -5,15 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{42F1AC2D-21CA-42BC-8AC2-7CBE21775813}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <BaseIntermediateOutputPath>..\..\obj\MultiAnimators</BaseIntermediateOutputPath>
     <RootNamespace>AT_Utils</RootNamespace>
-    <AssemblyName>002_MultiAnimators</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AssemblyName>MultiAnimators</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\GameData\000_AT_Utils\Plugins</OutputPath>
+    <OutputPath>..\..\bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -21,16 +22,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
-    <OutputPath>..\GameData\000_AT_Utils\Plugins</OutputPath>
+    <OutputPath>..\..\bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Nightbuild|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>..\GameData\000_AT_Utils\Plugins</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <DefineConstants>NIGHTBUILD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -44,22 +39,6 @@
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="KSPAssets">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\KSPAssets.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System">
       <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\System.dll</HintPath>
       <Private>False</Private>
@@ -72,25 +51,30 @@
       <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\System.Xml.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\..\..\..\..\LIB\managed\1.4.1\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="KSPAssets">
+      <HintPath>..\..\..\..\..\..\..\LIB\managed\1.4.1\KSPAssets.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\KSP-test\KSP_test_1.4.5\KSP_Data\Managed\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\..\..\..\..\LIB\managed\1.4.1\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnisotropicPartResizer\AnisotropicPartResizer.csproj">
       <Project>{19ABDD5C-1F12-4D67-B72E-E36071ABFF2C}</Project>
       <Name>AnisotropicPartResizer</Name>
-      <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\AT_Utils.csproj">
+    <ProjectReference Include="..\AT_Utils\AT_Utils.csproj">
       <Project>{64CC36A2-0610-4F74-9F31-3D4E22866B7E}</Project>
       <Name>AT_Utils</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 </Project>
